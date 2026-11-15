@@ -1,0 +1,146 @@
+<ion-header class="app-header">
+  <ion-toolbar color="primary">
+    <ion-title>我的待办</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        [disabled]="completedCount() === 0"
+        (click)="clearCompleted()"
+        title="清理已完成"
+      >
+        <ion-icon slot="icon-only" name="checkmark-done-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar color="primary">
+    <ion-segment [value]="filter()" mode="ios">
+      <ion-segment-button value="all" (click)="selectFilter('all')">
+        <ion-label>全部</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="active" (click)="selectFilter('active')">
+        <ion-label>待完成</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="completed" (click)="selectFilter('completed')">
+        <ion-label>已完成</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding-top">
+  <section class="overview">
+    <div class="overview__head">
+      <div>
+        <p class="overview__label">今日进度</p>
+        <h1 class="overview__value">
+          {{ completedCount() }}<span>/{{ total() }}</span>
+        </h1>
+      </div>
+      <ion-badge color="primary">{{ activeCount() }} 项待完成</ion-badge>
+    </div>
+    <ion-progress-bar [value]="progress()"></ion-progress-bar>
+  </section>
+
+  <ion-list lines="none" class="todo-list">
+    @for (todo of todos(); track todo.id) {
+      <ion-item-sliding>
+        <ion-item
+          class="todo-item"
+          [class.todo-item--done]="todo.completed"
+          [routerLink]="['/tabs/todos', todo.id]"
+          detail="true"
+        >
+          <div slot="start" class="check-wrap" (click)="$event.stopPropagation()">
+            <ion-checkbox
+              mode="ios"
+              [checked]="todo.completed"
+              (ionChange)="toggle(todo)"
+            ></ion-checkbox>
+          </div>
+          <ion-label>
+            <h2>{{ todo.title }}</h2>
+            <p>{{ todo.description || '暂无描述' }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item-options side="end">
+          <ion-item-option color="danger" expandable (click)="remove(todo)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    } @empty {
+      <div class="empty">
+        <ion-icon name="list-outline"></ion-icon>
+        <h3>这里空空如也</h3>
+        <p>点击右下角 + 添加第一条待办</p>
+      </div>
+    }
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="openCreate()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<ion-modal
+  [isOpen]="isCreateOpen()"
+  (didDismiss)="closeCreate()"
+  [backdropDismiss]="true"
+>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>新建待办</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeCreate()">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <form [formGroup]="createForm" (ngSubmit)="submitCreate()" class="create-form">
+        <ion-input
+          label="标题"
+          labelPlacement="stacked"
+          fill="outline"
+          mode="md"
+          placeholder="要做什么？"
+          formControlName="title"
+          [clearInput]="true"
+        ></ion-input>
+        @if (createForm.controls.title.touched && createForm.controls.title.invalid) {
+          <ion-note color="danger">请输入标题（最多 60 个字符）</ion-note>
+        }
+
+        <ion-textarea
+          label="描述"
+          labelPlacement="stacked"
+          fill="outline"
+          mode="md"
+          placeholder="补充说明（可选）"
+          formControlName="description"
+          [autoGrow]="true"
+          [rows]="3"
+        ></ion-textarea>
+
+        <ion-button expand="block" type="submit" class="create-form__submit">
+          <ion-icon slot="start" name="save-outline"></ion-icon>
+          添加待办
+        </ion-button>
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-toast
+  [isOpen]="toastOpen()"
+  [message]="toastMessage()"
+  [duration]="1800"
+  position="bottom"
+  (didDismiss)="toastOpen.set(false)"
+></ion-toast>

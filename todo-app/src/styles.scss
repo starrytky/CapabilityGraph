@@ -1,0 +1,39 @@
+/* 应用级全局样式（Ionic 的核心 CSS 已在 angular.json 的 styles 中按顺序引入） */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--ion-background-color);
+}
+
+ion-toolbar {
+  --border-width: 0;
+}
+
+ion-title {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+ion-content::part(scroll) {
+  scroll-behavior: smooth;
+}
+
+/* 表单控件的统一外观 */
+ion-input,
+ion-textarea {
+  --border-radius: 14px;
+  --padding-start: 14px;
+  --padding-end: 14px;
+}
+
+ion-input[fill="outline"],
+ion-textarea[fill="outline"] {
+  --border-color: #98a2b3;
+  --border-width: 1px;
+  --highlight-color-focused: #4f46e5;
+  --highlight-color-valid: #10b981;
+  --highlight-color-invalid: #f04438;
+}

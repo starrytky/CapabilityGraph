@@ -1,0 +1,314 @@
+.header-count {
+  margin-inline-end: 12px;
+  --background: rgba(255, 255, 255, 0.22);
+  --color: #fff;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+.intro {
+  padding: 20px 20px 4px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #101828;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #667085;
+  }
+}
+
+.component-search {
+  --background: #ffffff;
+  --box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  --border-radius: 14px;
+  --placeholder-color: #98a2b3;
+  padding: 8px 12px 0;
+}
+
+/* ---------- 实时预览 ---------- */
+.preview-card {
+  margin: 16px;
+  border-radius: 20px;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+
+  ion-card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #101828;
+  }
+
+  ion-card-subtitle {
+    font-size: 12px;
+    color: #98a2b3;
+    text-transform: none;
+  }
+}
+
+.preview-row {
+  display: flex;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px dashed #eef0f5;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.preview-label {
+  flex: 0 0 84px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #98a2b3;
+  padding-top: 6px;
+  word-break: break-word;
+}
+
+.preview-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+
+  ion-chip {
+    margin: 0;
+    height: 26px;
+    font-size: 12px;
+  }
+
+  ion-badge {
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
+
+  ion-button {
+    margin: 0;
+    --border-radius: 10px;
+    text-transform: none;
+  }
+
+  &--stretch {
+    display: block;
+  }
+
+  &--column {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  ion-range {
+    padding: 0;
+  }
+
+  ion-progress-bar {
+    --background: #eef0f5;
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+}
+
+.skeleton-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 90px;
+
+  ion-skeleton-text {
+    margin: 0;
+    height: 10px;
+    border-radius: 6px;
+  }
+}
+
+.demo-avatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #4f46e5, #a855f7);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- 组件清单 ---------- */
+.component-groups {
+  margin: 0 16px 8px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+}
+
+.group-header {
+  --background: #fff;
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+
+  ion-icon {
+    font-size: 20px;
+    margin-right: 12px;
+  }
+
+  h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #101828;
+  }
+
+  p {
+    font-size: 12px;
+    color: #98a2b3;
+  }
+
+  ion-badge {
+    --background: #eef2ff;
+    --color: #4f46e5;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+}
+
+.group-body {
+  background: #fff;
+  padding: 4px 14px 12px;
+}
+
+.component-row {
+  display: grid;
+  grid-template-columns: 1fr auto 16px;
+  gap: 2px 8px;
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid #f4f6fa;
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background: #f8f9fc;
+  }
+
+  &__name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    code {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #4f46e5;
+    }
+
+    em {
+      font-style: normal;
+      font-size: 10px;
+      font-weight: 600;
+      color: #10b981;
+      background: #ecfdf5;
+      border-radius: 999px;
+      padding: 1px 6px;
+    }
+  }
+
+  &__zh {
+    font-size: 11px;
+    color: #667085;
+    text-align: right;
+    align-self: center;
+  }
+
+  &__desc {
+    grid-column: 1 / -1;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: #98a2b3;
+  }
+
+  &__go {
+    grid-row: 1;
+    grid-column: 3;
+    align-self: center;
+    font-size: 14px;
+    color: #c7cdd8;
+  }
+}
+
+.empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: #98a2b3;
+  font-size: 13px;
+}
+
+.footnote {
+  margin: 4px 20px 24px;
+  font-size: 11.5px;
+  color: #b0b8c4;
+  text-align: center;
+}
+
+ion-modal.demo-modal {
+  --border-radius: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .intro h1 {
+    color: #e6e9f2;
+  }
+
+  .group-header,
+  .group-body {
+    --background: #131a2e;
+    background: #131a2e;
+  }
+
+  .group-header h2 {
+    color: #e6e9f2;
+  }
+
+  .component-row {
+    border-bottom-color: #1f2740;
+
+    &__name code {
+      color: #a5b4fc;
+    }
+  }
+}

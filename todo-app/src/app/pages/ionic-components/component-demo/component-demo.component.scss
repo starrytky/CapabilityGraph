@@ -1,0 +1,383 @@
+.live-badge {
+  margin-inline-end: 12px;
+  --background: rgba(255, 255, 255, 0.22);
+  --color: #fff;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.demo-content {
+  --background: #f5f6fa;
+}
+
+.intro {
+  padding: 18px 20px 0;
+
+  h2 {
+    margin: 0 0 6px;
+    font-size: 19px;
+    font-weight: 700;
+    color: #101828;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #667085;
+  }
+}
+
+/* ---------- 演示舞台 ---------- */
+.stage {
+  margin: 16px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #eef0f5;
+  border-radius: 16px;
+
+  &--flush {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  &-relative {
+    position: relative;
+    min-height: 120px;
+    padding: 0 0 8px;
+
+    &--tall {
+      min-height: 200px;
+    }
+  }
+}
+
+.structure {
+  text-align: center;
+  color: #667085;
+
+  ion-icon {
+    font-size: 34px;
+    color: #6366f1;
+  }
+
+  h3 {
+    margin: 8px 0 6px;
+    font-size: 15px;
+    color: #344054;
+  }
+
+  p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.7;
+  }
+
+  code {
+    background: #eef2ff;
+    color: #4f46e5;
+    padding: 1px 5px;
+    border-radius: 5px;
+    font-size: 11.5px;
+  }
+}
+
+.mini {
+  position: relative;
+  border: 1px solid #eef0f5;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+
+  &__body {
+    padding: 14px;
+    font-size: 13px;
+    color: #475467;
+    background: #fafbfe;
+
+    p {
+      margin: 0 0 8px;
+      line-height: 1.6;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__scroll {
+    height: 220px;
+    --background: #fafbfe;
+
+    p {
+      font-size: 13px;
+      color: #475467;
+    }
+  }
+
+  &--menu {
+    height: 210px;
+
+    .mini__body {
+      height: 100%;
+    }
+  }
+
+  &--split {
+    height: 200px;
+
+    ion-split-pane {
+      --side-width: 130px;
+      height: 100%;
+    }
+  }
+}
+
+.demo-grid {
+  padding: 0;
+
+  ion-col {
+    padding: 4px;
+  }
+}
+
+.cell {
+  background: #eef2ff;
+  color: #4f46e5;
+  border-radius: 8px;
+  padding: 10px 6px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.row-offset {
+  margin-top: 2px;
+
+  .cell {
+    background: #f4f6fa;
+    color: #667085;
+    font-weight: 500;
+  }
+}
+
+/* ---------- 通用小元素 ---------- */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #98a2b3;
+}
+
+.live {
+  margin: 10px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4f46e5;
+}
+
+.muted {
+  color: #98a2b3;
+}
+
+.mt {
+  margin-top: 12px;
+}
+
+.btn-row,
+.chip-row,
+.badge-row,
+.icon-row,
+.spinner-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  & + & {
+    margin-top: 10px;
+  }
+}
+
+.chip-row ion-chip,
+.btn-row ion-button {
+  margin: 0;
+}
+
+.icon-row {
+  font-size: 26px;
+
+  &--lg {
+    font-size: 34px;
+  }
+}
+
+.spinner-row {
+  gap: 18px;
+}
+
+.seg-content {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f8f9fc;
+  font-size: 13px;
+  color: #475467;
+}
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.sliding-list {
+  background: transparent;
+}
+
+.avatar-text,
+.avatar-lg,
+.thumb-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4f46e5, #a855f7);
+}
+
+.avatar-text {
+  font-size: 13px;
+}
+
+.avatar-lg {
+  width: 56px;
+  height: 56px;
+  font-size: 14px;
+}
+
+.thumb-text {
+  font-size: 18px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+}
+
+.demo-img {
+  width: 100%;
+  height: 140px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.demo-tab-bar {
+  --background: #fff;
+  height: 56px;
+  border-top: 1px solid #eef0f5;
+}
+
+.ripple-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ---------- 属性调节 ---------- */
+.controls {
+  margin: 0 16px 16px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid #eef0f5;
+  border-radius: 16px;
+
+  h4 {
+    margin: 0 0 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #98a2b3;
+  }
+}
+
+.control-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 6px 0;
+
+  > span {
+    flex: 0 0 92px;
+    font-size: 11.5px;
+    color: #667085;
+    padding-top: 7px;
+  }
+}
+
+.control-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  ion-chip {
+    margin: 0;
+    height: 26px;
+    font-size: 11.5px;
+  }
+}
+
+/* ---------- 代码片段 ---------- */
+.snippet {
+  margin: 0 16px 8px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0f172a;
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid #1e293b;
+    color: #94a3b8;
+    font-size: 12px;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: none;
+      background: rgba(148, 163, 184, 0.12);
+      color: #cbd5e1;
+      font-size: 11.5px;
+      padding: 4px 9px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  }
+
+  pre {
+    margin: 0;
+    padding: 14px;
+    overflow-x: auto;
+    color: #e2e8f0;
+    font-size: 11.5px;
+    line-height: 1.65;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+  }
+}
+
+.bottom-space {
+  height: 20px;
+}

@@ -1,0 +1,175 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Ionic 组件</ion-title>
+    <ion-badge slot="end" color="light" class="header-count">{{ total }} 个</ion-badge>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <section class="intro">
+    <h1>Ionic 8 组件总览</h1>
+    <p>共 {{ total }} 个组件，点击任意一行打开可交互演示。</p>
+  </section>
+
+  <ion-searchbar
+    class="component-search"
+    placeholder="搜索组件，如 input / 弹窗 / 列表"
+    [debounce]="150"
+    (ionInput)="onSearchInput($event)"
+  ></ion-searchbar>
+
+  <ion-card class="preview-card">
+    <ion-card-header>
+      <ion-card-title>实时预览</ion-card-title>
+      <ion-card-subtitle>下面都是真实渲染的组件，可直接操作</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div class="preview-row">
+        <span class="preview-label">chip / badge</span>
+        <div class="preview-body">
+          <ion-chip outline="true" color="primary">
+            <ion-label>标签</ion-label>
+          </ion-chip>
+          <ion-chip color="success">
+            <ion-icon name="star"></ion-icon>
+            <ion-label>已演示</ion-label>
+          </ion-chip>
+          <ion-badge color="primary">12</ion-badge>
+          <ion-badge color="warning">待办</ion-badge>
+        </div>
+      </div>
+
+      <div class="preview-row">
+        <span class="preview-label">button / text</span>
+        <div class="preview-body">
+          <ion-button size="small">主要</ion-button>
+          <ion-button size="small" fill="outline">描边</ion-button>
+          <ion-button size="small" fill="clear" color="success">文字</ion-button>
+          <ion-text color="danger"><small>ion-text</small></ion-text>
+        </div>
+      </div>
+
+      <div class="preview-row">
+        <span class="preview-label">toggle / checkbox</span>
+        <div class="preview-body">
+          <ion-toggle
+            mode="ios"
+            [checked]="toggleOn()"
+            (ionChange)="toggleOn.set($any($event).detail.checked)"
+          ></ion-toggle>
+          <ion-checkbox mode="ios" [checked]="true"></ion-checkbox>
+          <ion-checkbox mode="ios" [checked]="false"></ion-checkbox>
+        </div>
+      </div>
+
+      <div class="preview-row">
+        <span class="preview-label">segment</span>
+        <div class="preview-body preview-body--stretch">
+          <ion-segment mode="ios" [value]="segment()">
+            <ion-segment-button value="list" (click)="segment.set('list')">
+              <ion-label>列表</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="grid" (click)="segment.set('grid')">
+              <ion-label>网格</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+      </div>
+
+      <div class="preview-row">
+        <span class="preview-label">range / progress</span>
+        <div class="preview-body preview-body--stretch preview-body--column">
+          <ion-range
+            aria-label="进度示例"
+            [value]="rangeValue()"
+            [pin]="true"
+            (ionChange)="rangeValue.set($any($event).detail.value)"
+          ></ion-range>
+          <ion-progress-bar [value]="rangeValue() / 100"></ion-progress-bar>
+        </div>
+      </div>
+
+      <div class="preview-row">
+        <span class="preview-label">spinner / skeleton</span>
+        <div class="preview-body">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+          <div class="skeleton-wrap">
+            <ion-skeleton-text [animated]="true" style="width: 60%"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 88%"></ion-skeleton-text>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-row">
+        <span class="preview-label">avatar / thumbnail</span>
+        <div class="preview-body">
+          <ion-avatar class="demo-avatar">IO</ion-avatar>
+          <ion-thumbnail class="demo-thumb">8</ion-thumbnail>
+          <ion-note>ion-avatar / ion-thumbnail</ion-note>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-accordion-group
+    class="component-groups"
+    [multiple]="true"
+    [value]="expandedGroups()"
+  >
+    @for (group of filteredGroups(); track group.key) {
+      <ion-accordion [value]="group.key">
+        <ion-item slot="header" lines="none" class="group-header">
+          <ion-icon slot="start" [name]="group.icon" color="primary"></ion-icon>
+          <ion-label>
+            <h2>{{ group.title }}</h2>
+            <p>{{ group.desc }}</p>
+          </ion-label>
+          <ion-badge slot="end" color="light">{{ group.items.length }}</ion-badge>
+        </ion-item>
+
+        <div slot="content" class="group-body">
+          @for (item of group.items; track item.name) {
+            <button type="button" class="component-row" (click)="openDemo(item)">
+              <span class="component-row__name">
+                <code>{{ item.name }}</code>
+                @if (item.structure) {
+                  <em>结构</em>
+                }
+              </span>
+              <span class="component-row__zh">{{ item.zh }}</span>
+              <span class="component-row__desc">{{ item.desc }}</span>
+              <ion-icon class="component-row__go" name="chevron-forward-outline"></ion-icon>
+            </button>
+          }
+        </div>
+      </ion-accordion>
+    } @empty {
+      <div class="empty">
+        <p>没有匹配「{{ searchTerm() }}」的组件</p>
+      </div>
+    }
+  </ion-accordion-group>
+
+  <p class="footnote">共 {{ total }} 个组件，数据整理自 Ionic 8 官方组件库。</p>
+</ion-content>
+
+<ion-toast
+  [isOpen]="toastOpen()"
+  [message]="toastMessage()"
+  [duration]="1600"
+  position="bottom"
+  (didDismiss)="toastOpen.set(false)"
+></ion-toast>
+
+<ion-modal
+  [isOpen]="selected() !== null"
+  (didDismiss)="closeDemo()"
+  class="demo-modal"
+>
+  <ng-template>
+    @if (selected(); as comp) {
+      <app-component-demo [item]="comp" (closed)="closeDemo()"></app-component-demo>
+    }
+  </ng-template>
+</ion-modal>

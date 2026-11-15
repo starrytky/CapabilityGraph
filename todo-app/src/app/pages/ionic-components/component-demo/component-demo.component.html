@@ -1,0 +1,1037 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="closed.emit()" aria-label="关闭">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ item().name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-badge color="light" class="live-badge">实时</ion-badge>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="demo-content">
+  <section class="intro">
+    <h2>{{ item().zh }}</h2>
+    <p>{{ item().desc }}</p>
+  </section>
+
+  @if (item().structure) {
+    <div class="stage structure">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      <h3>这是一个结构性组件</h3>
+      <p>
+        它不产生独立可见的 UI，而是作为页面骨架或路由容器存在。
+        在本项目的 <code>app.component.html</code> / <code>pages/tabs/tabs.page.html</code>
+        中可以看到它的真实用法。
+      </p>
+    </div>
+  } @else {
+    <div class="stage" [class.stage--flush]="flush()">
+      @switch (name()) {
+        <!-- ===================== 布局 ===================== -->
+        @case ('ion-header') {
+          <div class="mini">
+            <ion-header>
+              <ion-toolbar color="primary">
+                <ion-title>页头</ion-title>
+              </ion-toolbar>
+            </ion-header>
+            <div class="mini__body">
+              <p>页头固定在内容之上，滚动时保持不动。</p>
+            </div>
+          </div>
+        }
+
+        @case ('ion-toolbar') {
+          <ion-toolbar color="primary">
+            <ion-title>工具栏</ion-title>
+            <ion-buttons slot="end">
+              <ion-button>操作</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        }
+
+        @case ('ion-footer') {
+          <div class="mini">
+            <div class="mini__body">
+              <p>上方是内容区，页脚固定在底部。</p>
+            </div>
+            <ion-footer>
+              <ion-toolbar>
+                <ion-title>页脚</ion-title>
+              </ion-toolbar>
+            </ion-footer>
+          </div>
+        }
+
+        @case ('ion-content') {
+          <ion-content scrollY="true" class="mini__scroll">
+            <div class="ion-padding">
+              <p><strong>这是 ion-content 内部</strong>，可以独立滚动：</p>
+              @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+                <p>第 {{ i }} 段内容，继续向上滑动试试……</p>
+              }
+            </div>
+          </ion-content>
+        }
+
+        @case ('ion-grid') {
+          <ion-grid class="demo-grid">
+            <ion-row>
+              <ion-col size="6"><div class="cell">size=6</div></ion-col>
+              <ion-col size="6"><div class="cell">size=6</div></ion-col>
+              <ion-col size="4"><div class="cell">4</div></ion-col>
+              <ion-col size="8"><div class="cell">8</div></ion-col>
+            </ion-row>
+          </ion-grid>
+        }
+
+        @case ('ion-row') {
+          <ion-grid class="demo-grid">
+            <ion-row>
+              <ion-col><div class="cell">A</div></ion-col>
+              <ion-col><div class="cell">B</div></ion-col>
+              <ion-col><div class="cell">C</div></ion-col>
+            </ion-row>
+            <ion-row class="row-offset">
+              <ion-col><div class="cell">第二行</div></ion-col>
+            </ion-row>
+          </ion-grid>
+        }
+
+        @case ('ion-col') {
+          <ion-grid class="demo-grid">
+            <ion-row>
+              <ion-col size="3"><div class="cell">3</div></ion-col>
+              <ion-col size="9"><div class="cell">9</div></ion-col>
+              <ion-col size="12"><div class="cell">12（整行）</div></ion-col>
+            </ion-row>
+          </ion-grid>
+        }
+
+        @case ('ion-list') {
+          <ion-list inset="true">
+            <ion-item>
+              <ion-label>列表项一</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>列表项二</ion-label>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label>最后一项（无分隔线）</ion-label>
+            </ion-item>
+          </ion-list>
+        }
+
+        @case ('ion-item') {
+          <ion-list inset="true">
+            <ion-item detail="true" button="true" (click)="toast('点击了 ion-item')">
+              <ion-icon slot="start" name="heart" color="danger"></ion-icon>
+              <ion-label>
+                <h2>带图标与箭头</h2>
+                <p>start 插槽、detail 箭头、可点击</p>
+              </ion-label>
+              <ion-icon slot="end" name="star" color="warning"></ion-icon>
+            </ion-item>
+          </ion-list>
+        }
+
+        @case ('ion-item-divider') {
+          <ion-list inset="true">
+            <ion-item-divider>
+              <ion-label>分组标题</ion-label>
+            </ion-item-divider>
+            <ion-item>
+              <ion-label>分组内的条目</ion-label>
+            </ion-item>
+          </ion-list>
+        }
+
+        @case ('ion-item-group') {
+          <ion-list inset="true">
+            <ion-item-group>
+              <ion-item-divider color="light">
+                <ion-label>A 组</ion-label>
+              </ion-item-divider>
+              <ion-item><ion-label>A-1</ion-label></ion-item>
+              <ion-item><ion-label>A-2</ion-label></ion-item>
+            </ion-item-group>
+            <ion-item-group>
+              <ion-item-divider color="light">
+                <ion-label>B 组</ion-label>
+              </ion-item-divider>
+              <ion-item><ion-label>B-1</ion-label></ion-item>
+            </ion-item-group>
+          </ion-list>
+        }
+
+        @case ('ion-item-sliding') {
+          <ion-list lines="none" class="sliding-list">
+            @for (text of slidingItems(); track text; let i = $index) {
+              <ion-item-sliding>
+                <ion-item>
+                  <ion-label>{{ text }}</ion-label>
+                </ion-item>
+                <ion-item-options side="end">
+                  <ion-item-option color="danger" (click)="removeSliding(i)">
+                    <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                  </ion-item-option>
+                </ion-item-options>
+              </ion-item-sliding>
+            } @empty {
+              <ion-item lines="none">
+                <ion-label class="muted">已全部删除</ion-label>
+              </ion-item>
+            }
+          </ion-list>
+          <ion-button fill="clear" size="small" (click)="resetSliding()">重置列表</ion-button>
+        }
+
+        @case ('ion-menu') {
+          <div class="mini mini--menu">
+            <ion-menu contentId="demo-menu-a" side="start">
+              <ion-content class="ion-padding">
+                <ion-list lines="none">
+                  <ion-item><ion-label>菜单项 A</ion-label></ion-item>
+                  <ion-item><ion-label>菜单项 B</ion-label></ion-item>
+                  <ion-item><ion-label>菜单项 C</ion-label></ion-item>
+                </ion-list>
+              </ion-content>
+            </ion-menu>
+            <div id="demo-menu-a" class="mini__body">
+              <ion-menu-toggle>
+                <ion-button size="small">
+                  <ion-icon slot="start" name="list-outline"></ion-icon>
+                  打开侧边菜单
+                </ion-button>
+              </ion-menu-toggle>
+              <p class="hint">菜单从左侧滑出，点击遮罩关闭。</p>
+            </div>
+          </div>
+        }
+
+        @case ('ion-menu-button') {
+          <div class="mini mini--menu">
+            <ion-menu contentId="demo-menu-b" side="start">
+              <ion-content class="ion-padding">
+                <ion-list lines="none">
+                  <ion-item><ion-label>菜单项</ion-label></ion-item>
+                </ion-list>
+              </ion-content>
+            </ion-menu>
+            <div id="demo-menu-b">
+              <ion-toolbar>
+                <ion-menu-button></ion-menu-button>
+                <ion-title>点左上角汉堡按钮</ion-title>
+              </ion-toolbar>
+              <div class="mini__body"><p class="hint">ion-menu-button 会自动出现并控制菜单。</p></div>
+            </div>
+          </div>
+        }
+
+        @case ('ion-menu-toggle') {
+          <div class="mini mini--menu">
+            <ion-menu contentId="demo-menu-c" side="start">
+              <ion-content class="ion-padding">
+                <ion-list lines="none">
+                  <ion-item><ion-label>菜单项</ion-label></ion-item>
+                </ion-list>
+              </ion-content>
+            </ion-menu>
+            <div id="demo-menu-c" class="mini__body">
+              <ion-menu-toggle>
+                <ion-button size="small">点我切换菜单</ion-button>
+              </ion-menu-toggle>
+            </div>
+          </div>
+        }
+
+        @case ('ion-split-pane') {
+          <div class="mini mini--split">
+            <ion-split-pane contentId="demo-split-main" when="xs">
+              <ion-menu contentId="demo-split-main" side="start">
+                <ion-content>
+                  <ion-list lines="none">
+                    <ion-item><ion-label>侧栏 A</ion-label></ion-item>
+                    <ion-item><ion-label>侧栏 B</ion-label></ion-item>
+                  </ion-list>
+                </ion-content>
+              </ion-menu>
+              <div id="demo-split-main" class="mini__body">
+                <p>宽屏显示侧栏，窄屏自动折叠为菜单。</p>
+              </div>
+            </ion-split-pane>
+          </div>
+        }
+
+        @case ('ion-note') {
+          <div class="stack">
+            <ion-note>默认 note</ion-note>
+            <ion-note color="primary">primary note</ion-note>
+            <ion-note color="success">success note</ion-note>
+            <ion-note color="danger">danger note</ion-note>
+          </div>
+        }
+
+        <!-- ===================== 表单 ===================== -->
+        @case ('ion-input') {
+          <ion-input
+            label="昵称"
+            [labelPlacement]="labelPlacement()"
+            [fill]="inputFill()"
+            [value]="inputValue()"
+            [clearInput]="true"
+            placeholder="请输入昵称"
+            (ionInput)="inputValue.set($any($event).detail.value ?? '')"
+          ></ion-input>
+          <p class="live">实时值：{{ inputValue() || '（空）' }}</p>
+        }
+
+        @case ('ion-textarea') {
+          <ion-textarea
+            label="备注"
+            labelPlacement="floating"
+            fill="outline"
+            [autoGrow]="true"
+            [rows]="2"
+            [value]="textValue()"
+            [counter]="true"
+            [maxlength]="120"
+            (ionInput)="textValue.set($any($event).detail.value ?? '')"
+          ></ion-textarea>
+          <p class="live">已输入 {{ textValue().length }} / 120 字</p>
+        }
+
+        @case ('ion-searchbar') {
+          <ion-searchbar
+            placeholder="搜索技术栈"
+            [debounce]="100"
+            (ionInput)="onSearch($event)"
+          ></ion-searchbar>
+          <ion-list inset="true">
+            @for (item of searchResults(); track item) {
+              <ion-item>
+                <ion-label>{{ item }}</ion-label>
+              </ion-item>
+            } @empty {
+              <ion-item><ion-label class="muted">没有匹配项</ion-label></ion-item>
+            }
+          </ion-list>
+        }
+
+        @case ('ion-select') {
+          <ion-select
+            label="技术栈"
+            labelPlacement="floating"
+            fill="outline"
+            [value]="selectVal()"
+            (ionChange)="selectVal.set($any($event).detail.value)"
+          >
+            <ion-select-option value="ionic">Ionic</ion-select-option>
+            <ion-select-option value="angular">Angular</ion-select-option>
+            <ion-select-option value="capacitor">Capacitor</ion-select-option>
+          </ion-select>
+          <p class="live">已选：{{ selectVal() ?? '未选择' }}</p>
+        }
+
+        @case ('ion-select-option') {
+          <ion-select label="口味" fill="outline" value="latte" interface="action-sheet">
+            <ion-select-option value="latte">拿铁</ion-select-option>
+            <ion-select-option value="mocha">摩卡</ion-select-option>
+            <ion-select-option value="americano">美式</ion-select-option>
+          </ion-select>
+          <p class="hint">点击展开，每个选项就是 ion-select-option。</p>
+        }
+
+        @case ('ion-checkbox') {
+          <ion-list inset="true">
+            <ion-item>
+              <ion-checkbox slot="start" [checked]="checkA()" (ionChange)="checkA.set($any($event).detail.checked)"></ion-checkbox>
+              <ion-label>接收通知</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-checkbox slot="start" [checked]="checkB()" (ionChange)="checkB.set($any($event).detail.checked)"></ion-checkbox>
+              <ion-label>订阅周报</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-checkbox slot="start" [indeterminate]="true"></ion-checkbox>
+              <ion-label>半选状态（indeterminate）</ion-label>
+            </ion-item>
+          </ion-list>
+          <p class="live">通知：{{ checkA() ? '开' : '关' }} · 周报：{{ checkB() ? '开' : '关' }}</p>
+        }
+
+        @case ('ion-radio') {
+          <ion-radio-group [value]="radio()" (ionChange)="radio.set($any($event).detail.value)">
+            <ion-list inset="true">
+              <ion-item>
+                <ion-radio slot="start" value="standard"></ion-radio>
+                <ion-label>标准版</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-radio slot="start" value="pro"></ion-radio>
+                <ion-label>专业版</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-radio-group>
+          <p class="live">当前选择：{{ radio() }}</p>
+        }
+
+        @case ('ion-radio-group') {
+          <ion-radio-group [value]="radio()" (ionChange)="radio.set($any($event).detail.value)">
+            <ion-list inset="true">
+              <ion-item>
+                <ion-radio slot="start" value="standard"></ion-radio>
+                <ion-label>标准版</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-radio slot="start" value="pro"></ion-radio>
+                <ion-label>专业版</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-radio slot="start" value="team"></ion-radio>
+                <ion-label>团队版</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-radio-group>
+          <p class="live">当前选择：{{ radio() }}</p>
+        }
+
+        @case ('ion-toggle') {
+          <ion-list inset="true">
+            <ion-item>
+              <ion-toggle
+                [checked]="toggleOn()"
+                labelPlacement="start"
+                (ionChange)="toggleOn.set($any($event).detail.checked)"
+              >
+                夜间模式
+              </ion-toggle>
+            </ion-item>
+          </ion-list>
+          <p class="live">状态：{{ toggleOn() ? '已开启' : '已关闭' }}</p>
+        }
+
+        @case ('ion-range') {
+          <ion-range
+            aria-label="音量"
+            [value]="rangeVal()"
+            [pin]="true"
+            [ticks]="true"
+            [step]="5"
+            (ionChange)="rangeVal.set($any($event).detail.value)"
+          ></ion-range>
+          <p class="live">当前值：{{ rangeVal() }}</p>
+        }
+
+        @case ('ion-datetime') {
+          <ion-datetime
+            presentation="date"
+            [value]="dateVal()"
+            (ionChange)="dateVal.set($any($event).detail.value)"
+          ></ion-datetime>
+          <p class="live">选中：{{ dateVal() }}</p>
+        }
+
+        @case ('ion-datetime-button') {
+          <ion-datetime-button datetime="demo-datetime-button"></ion-datetime-button>
+          <ion-datetime
+            id="demo-datetime-button"
+            presentation="date-time"
+            [value]="dateVal()"
+            (ionChange)="dateVal.set($any($event).detail.value)"
+          ></ion-datetime>
+          <p class="hint">点击按钮会唤起 datetime 弹窗（就是下面那个组件）。</p>
+        }
+
+        @case ('ion-segment') {
+          <ion-segment [value]="segVal()" (ionChange)="segVal.set($any($event).detail.value)">
+            <ion-segment-button value="all"><ion-label>全部</ion-label></ion-segment-button>
+            <ion-segment-button value="active"><ion-label>待完成</ion-label></ion-segment-button>
+            <ion-segment-button value="done"><ion-label>已完成</ion-label></ion-segment-button>
+          </ion-segment>
+          <div class="seg-content">
+            当前视图：<strong>{{ segVal() }}</strong>
+          </div>
+        }
+
+        @case ('ion-segment-button') {
+          <ion-segment value="a">
+            <ion-segment-button value="a"><ion-label>选项 A</ion-label></ion-segment-button>
+            <ion-segment-button value="b"><ion-label>选项 B</ion-label></ion-segment-button>
+          </ion-segment>
+          <p class="hint">点一下，滑块会自动跟随选中项移动。</p>
+        }
+
+        @case ('ion-button') {
+          <div class="btn-row">
+            <ion-button
+              [fill]="btnFill()"
+              [size]="btnSize()"
+              [color]="btnColor()"
+              (click)="toast('按钮被点击了')"
+            >
+              主要按钮
+            </ion-button>
+            <ion-button fill="outline" [size]="btnSize()">描边</ion-button>
+            <ion-button fill="clear" [size]="btnSize()">文字</ion-button>
+          </div>
+          <div class="btn-row">
+            <ion-button disabled="true" size="small">禁用</ion-button>
+            <ion-button size="small" color="success">
+              <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+              带图标
+            </ion-button>
+          </div>
+        }
+
+        @case ('ion-fab') {
+          <div class="stage-relative">
+            <ion-fab vertical="bottom" horizontal="end">
+              <ion-fab-button (click)="toast('点击了悬浮按钮')">
+                <ion-icon name="add"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+            <p class="hint">ion-fab 负责定位，按钮悬浮在右下角。</p>
+          </div>
+        }
+
+        @case ('ion-fab-button') {
+          <div class="stage-relative stage-relative--tall">
+            <ion-fab vertical="bottom" horizontal="end">
+              <ion-fab-button color="primary" (click)="toast('ion-fab-button 点击')">
+                <ion-icon name="add"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+          </div>
+        }
+
+        @case ('ion-fab-list') {
+          <div class="stage-relative stage-relative--tall">
+            <ion-fab vertical="bottom" horizontal="end">
+              <ion-fab-button [activated]="fabOpen()" (click)="fabOpen.set(!fabOpen())">
+                <ion-icon name="add"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-list side="top">
+                <ion-fab-button color="success" (click)="toast('分享')">
+                  <ion-icon name="heart"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button color="warning" (click)="toast('收藏')">
+                  <ion-icon name="star"></ion-icon>
+                </ion-fab-button>
+              </ion-fab-list>
+            </ion-fab>
+            <p class="hint">点右下角 + 展开次级按钮。</p>
+          </div>
+        }
+
+        @case ('ion-chip') {
+          <div class="chip-row">
+            <ion-chip [outline]="!chipSelected()" (click)="chipSelected.set(!chipSelected())">
+              <ion-icon name="pricetag-outline"></ion-icon>
+              <ion-label>可点选</ion-label>
+            </ion-chip>
+            <ion-chip color="success" outline="true">
+              <ion-label>成功</ion-label>
+            </ion-chip>
+            <ion-chip color="danger" outline="true">
+              <ion-label>紧急</ion-label>
+            </ion-chip>
+          </div>
+          <p class="live">选中状态：{{ chipSelected() ? '已选' : '未选' }}</p>
+        }
+
+        <!-- ===================== 展示 ===================== -->
+        @case ('ion-card') {
+          <ion-card>
+            <ion-img [src]="sampleImg" alt="封面"></ion-img>
+            <ion-card-header>
+              <ion-card-subtitle>IONIC CARD</ion-card-subtitle>
+              <ion-card-title>卡片标题</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>卡片可以组合 header、图片、内容，适合承载一组相关信息。</ion-card-content>
+            <ion-button fill="clear" (click)="toast('卡片内按钮')">了解更多</ion-button>
+          </ion-card>
+        }
+
+        @case ('ion-card-header') {
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle>副标题</ion-card-subtitle>
+              <ion-card-title>卡片头部</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>header 通常放标题与副标题。</ion-card-content>
+          </ion-card>
+        }
+
+        @case ('ion-card-title') {
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>标题字号更大</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>ion-card-title 是卡片的主标题。</ion-card-content>
+          </ion-card>
+        }
+
+        @case ('ion-card-subtitle') {
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle>SUBTITLE / 小写大写风格</ion-card-subtitle>
+              <ion-card-title>主标题</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>副标题常用来做分类或时间标记。</ion-card-content>
+          </ion-card>
+        }
+
+        @case ('ion-card-content') {
+          <ion-card>
+            <ion-card-content>
+              这里是 ion-card-content，正文区域，默认有内边距与合适的行高。
+            </ion-card-content>
+          </ion-card>
+        }
+
+        @case ('ion-badge') {
+          <div class="badge-row">
+            <ion-badge color="primary">12</ion-badge>
+            <ion-badge color="success">已完成</ion-badge>
+            <ion-badge color="warning">待办</ion-badge>
+            <ion-badge color="danger">99+</ion-badge>
+            <ion-badge color="medium">草稿</ion-badge>
+          </div>
+        }
+
+        @case ('ion-avatar') {
+          <div class="badge-row">
+            <ion-avatar class="avatar-text">IO</ion-avatar>
+            <ion-avatar>
+              <ion-img [src]="sampleImg" alt="头像"></ion-img>
+            </ion-avatar>
+            <ion-avatar class="avatar-lg">A19</ion-avatar>
+          </div>
+        }
+
+        @case ('ion-thumbnail') {
+          <div class="badge-row">
+            <ion-thumbnail>
+              <ion-img [src]="sampleImg" alt="缩略图"></ion-img>
+            </ion-thumbnail>
+            <ion-thumbnail class="thumb-text">8</ion-thumbnail>
+          </div>
+        }
+
+        @case ('ion-icon') {
+          <div class="icon-row">
+            <ion-icon name="heart" color="danger"></ion-icon>
+            <ion-icon name="star" color="warning"></ion-icon>
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <ion-icon name="settings-outline" color="primary"></ion-icon>
+            <ion-icon name="person" color="medium"></ion-icon>
+          </div>
+          <div class="icon-row icon-row--lg">
+            <ion-icon name="home"></ion-icon>
+            <ion-icon name="list-outline"></ion-icon>
+            <ion-icon name="alert-circle-outline"></ion-icon>
+          </div>
+        }
+
+        @case ('ion-img') {
+          <ion-img [src]="sampleImg" alt="示例图片" class="demo-img"></ion-img>
+          <p class="hint">ion-img 会延迟加载并自动做占位，适合列表中的图片。</p>
+        }
+
+        @case ('ion-label') {
+          <ion-list inset="true">
+            <ion-item>
+              <ion-label>
+                <h2>主标题（h2）</h2>
+                <p>副标题（p）会自动变灰变小</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        }
+
+        @case ('ion-text') {
+          <div class="stack">
+            <ion-text color="primary">primary 文本</ion-text>
+            <ion-text color="success">success 文本</ion-text>
+            <ion-text color="danger"><strong>danger 加粗文本</strong></ion-text>
+            <ion-text><small>small 小号文本</small></ion-text>
+          </div>
+        }
+
+        @case ('ion-skeleton-text') {
+          <div class="skeleton-card">
+            <ion-skeleton-text [animated]="true" style="width: 38%; height: 14px"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 92%; height: 10px"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 76%; height: 10px"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 60%; height: 10px"></ion-skeleton-text>
+          </div>
+        }
+
+        @case ('ion-progress-bar') {
+          <ion-progress-bar [value]="rangeVal() / 100"></ion-progress-bar>
+          <ion-progress-bar type="indeterminate" class="mt"></ion-progress-bar>
+          <p class="live">上面是确定进度（拖动下面滑块看变化），下面是 indeterminate。</p>
+          <ion-range
+            aria-label="进度"
+            [value]="rangeVal()"
+            (ionChange)="rangeVal.set($any($event).detail.value)"
+          ></ion-range>
+        }
+
+        @case ('ion-spinner') {
+          <div class="spinner-row">
+            <ion-spinner name="crescent"></ion-spinner>
+            <ion-spinner name="dots" color="primary"></ion-spinner>
+            <ion-spinner name="circles" color="success"></ion-spinner>
+            <ion-spinner name="lines" color="danger"></ion-spinner>
+          </div>
+        }
+
+        @case ('ion-accordion') {
+          <ion-accordion-group [value]="accordionVal()">
+            <ion-accordion value="panel-1">
+              <ion-item slot="header">
+                <ion-label>点我展开 / 收起</ion-label>
+              </ion-item>
+              <div slot="content" class="ion-padding">
+                这是 ion-accordion 的内容区，带展开动画。
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+        }
+
+        @case ('ion-accordion-group') {
+          <ion-accordion-group [multiple]="true" [value]="accordionVal()">
+            <ion-accordion value="panel-1">
+              <ion-item slot="header"><ion-label>常见问题一</ion-label></ion-item>
+              <div slot="content" class="ion-padding">答案一。</div>
+            </ion-accordion>
+            <ion-accordion value="panel-2">
+              <ion-item slot="header"><ion-label>常见问题二</ion-label></ion-item>
+              <div slot="content" class="ion-padding">答案二。</div>
+            </ion-accordion>
+          </ion-accordion-group>
+        }
+
+        @case ('ion-ripple-effect') {
+          <ion-button expand="block" class="ripple-btn">
+            点我看水波纹
+            <ion-ripple-effect type="bounded"></ion-ripple-effect>
+          </ion-button>
+        }
+
+        <!-- ===================== 浮层 ===================== -->
+        @case ('ion-modal') {
+          <ion-button expand="block" (click)="innerModalOpen.set(true)">打开 ion-modal</ion-button>
+          <ion-modal
+            [isOpen]="innerModalOpen()"
+            (didDismiss)="innerModalOpen.set(false)"
+          >
+            <ng-template>
+              <ion-header>
+                <ion-toolbar>
+                  <ion-title>我是弹窗</ion-title>
+                  <ion-buttons slot="end">
+                    <ion-button (click)="innerModalOpen.set(false)">关闭</ion-button>
+                  </ion-buttons>
+                </ion-toolbar>
+              </ion-header>
+              <ion-content class="ion-padding">
+                <p>支持手势下拉关闭、返回键关闭，可配置断点做成半屏 sheet。</p>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+        }
+
+        @case ('ion-popover') {
+          <ion-button expand="block" (click)="popoverOpen.set(true)">打开 ion-popover</ion-button>
+          <ion-popover [isOpen]="popoverOpen()" (didDismiss)="popoverOpen.set(false)">
+            <ng-template>
+              <ion-content class="ion-padding">
+                <ion-list lines="none">
+                  <ion-item button="true" (click)="popoverOpen.set(false); toast('编辑')">
+                    <ion-label>编辑</ion-label>
+                  </ion-item>
+                  <ion-item button="true" (click)="popoverOpen.set(false); toast('删除')">
+                    <ion-label>删除</ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-content>
+            </ng-template>
+          </ion-popover>
+        }
+
+        @case ('ion-alert') {
+          <ion-button expand="block" (click)="alertOpen.set(true)">打开 ion-alert</ion-button>
+          <ion-alert
+            [isOpen]="alertOpen()"
+            header="确认删除？"
+            message="删除后无法恢复，确定继续吗？"
+            [buttons]="alertButtons"
+            (didDismiss)="alertOpen.set(false)"
+          ></ion-alert>
+        }
+
+        @case ('ion-action-sheet') {
+          <ion-button expand="block" (click)="sheetOpen.set(true)">打开 action-sheet</ion-button>
+          <ion-action-sheet
+            [isOpen]="sheetOpen()"
+            header="更多操作"
+            [buttons]="actionButtons"
+            (didDismiss)="sheetOpen.set(false)"
+          ></ion-action-sheet>
+        }
+
+        @case ('ion-toast') {
+          <ion-button expand="block" (click)="previewToast()">显示 ion-toast</ion-button>
+          <p class="hint">ion-toast 会浮在页面底部，1.6 秒后自动消失。</p>
+        }
+
+        @case ('ion-loading') {
+          <ion-button expand="block" (click)="showLoading()">显示 ion-loading</ion-button>
+          <ion-loading
+            [isOpen]="loadingOpen()"
+            message="加载中…"
+            [duration]="1500"
+            (didDismiss)="loadingOpen.set(false)"
+          ></ion-loading>
+        }
+
+        @case ('ion-backdrop') {
+          <ion-button expand="block" (click)="backdropOpen.set(true)">显示 ion-backdrop</ion-button>
+          <ion-backdrop [visible]="backdropOpen()" (click)="backdropOpen.set(false)"></ion-backdrop>
+          <p class="hint">点击遮罩区域关闭（半透明黑色背景）。</p>
+        }
+
+        <!-- ===================== 导航 ===================== -->
+        @case ('ion-tab-bar') {
+          <ion-tab-bar class="demo-tab-bar">
+            <ion-tab-button (click)="tabVal.set('home')" [selected]="tabVal() === 'home'">
+              <ion-icon name="home"></ion-icon>
+              <ion-label>首页</ion-label>
+            </ion-tab-button>
+            <ion-tab-button (click)="tabVal.set('list')" [selected]="tabVal() === 'list'">
+              <ion-icon name="list-outline"></ion-icon>
+              <ion-label>列表</ion-label>
+            </ion-tab-button>
+            <ion-tab-button (click)="tabVal.set('me')" [selected]="tabVal() === 'me'">
+              <ion-icon name="person"></ion-icon>
+              <ion-label>我的</ion-label>
+            </ion-tab-button>
+          </ion-tab-bar>
+          <p class="live">当前 tab：{{ tabVal() }}</p>
+        }
+
+        @case ('ion-tab-button') {
+          <ion-tab-bar class="demo-tab-bar">
+            <ion-tab-button [selected]="true">
+              <ion-icon name="home"></ion-icon>
+              <ion-label>选中态</ion-label>
+            </ion-tab-button>
+            <ion-tab-button>
+              <ion-icon name="settings-outline"></ion-icon>
+              <ion-label>未选中</ion-label>
+            </ion-tab-button>
+          </ion-tab-bar>
+        }
+
+        @case ('ion-back-button') {
+          <ion-toolbar>
+            <ion-back-button defaultHref="/tabs/components" text="返回"></ion-back-button>
+            <ion-title>带返回按钮的工具栏</ion-title>
+          </ion-toolbar>
+          <p class="hint">点击左侧返回会回到组件页（走真实路由）。</p>
+        }
+
+        @case ('ion-breadcrumbs') {
+          <ion-breadcrumbs>
+            <ion-breadcrumb (click)="crumb.set(1)" [class.active]="crumb() === 1">首页</ion-breadcrumb>
+            <ion-breadcrumb (click)="crumb.set(2)" [class.active]="crumb() === 2">组件库</ion-breadcrumb>
+            <ion-breadcrumb (click)="crumb.set(3)" [class.active]="crumb() === 3">详情</ion-breadcrumb>
+          </ion-breadcrumbs>
+          <p class="live">当前层级：{{ crumb() }}</p>
+        }
+
+        @case ('ion-breadcrumb') {
+          <ion-breadcrumbs>
+            <ion-breadcrumb>根目录</ion-breadcrumb>
+            <ion-breadcrumb>子目录</ion-breadcrumb>
+          </ion-breadcrumbs>
+          <p class="hint">最后一个会自动加粗表示当前位置。</p>
+        }
+
+        <!-- ===================== 工具 ===================== -->
+        @case ('ion-refresher') {
+          <ion-content class="mini__scroll" scrollY="true">
+            <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+              <ion-refresher-content></ion-refresher-content>
+            </ion-refresher>
+            <div class="ion-padding">
+              <p>下拉试试下拉刷新，已刷新 {{ refresherCount() }} 次。</p>
+              <p class="hint">在容器顶部向下拖拽触发。</p>
+            </div>
+          </ion-content>
+        }
+
+        @case ('ion-refresher-content') {
+          <ion-content class="mini__scroll" scrollY="true">
+            <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+              <ion-refresher-content pullingText="下拉刷新" refreshingText="刷新中…"></ion-refresher-content>
+            </ion-refresher>
+            <div class="ion-padding">
+              <p>已刷新 {{ refresherCount() }} 次，下拉看看自定义文案。</p>
+            </div>
+          </ion-content>
+        }
+
+        @case ('ion-infinite-scroll') {
+          <ion-content class="mini__scroll" scrollY="true">
+            <ion-list lines="none">
+              @for (item of infiniteItems(); track item) {
+                <ion-item><ion-label>{{ item }}</ion-label></ion-item>
+              }
+            </ion-list>
+            <ion-infinite-scroll [disabled]="infinityDone()" (ionInfinite)="loadMore($event)">
+              <ion-infinite-scroll-content loadingText="加载中…"></ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+          </ion-content>
+          <p class="live">已加载 {{ infiniteItems().length }} 条，滚动到底部自动加载。</p>
+        }
+
+        @case ('ion-infinite-scroll-content') {
+          <ion-content class="mini__scroll" scrollY="true">
+            <ion-list lines="none">
+              @for (item of infiniteItems(); track item) {
+                <ion-item><ion-label>{{ item }}</ion-label></ion-item>
+              }
+            </ion-list>
+            <ion-infinite-scroll [disabled]="infinityDone()" (ionInfinite)="loadMore($event)">
+              <ion-infinite-scroll-content loadingSpinner="dots" loadingText="正在加载更多…"></ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+          </ion-content>
+          <p class="live">已加载 {{ infiniteItems().length }} 条</p>
+        }
+
+        @case ('ion-reorder') {
+          <ion-reorder-group [disabled]="false" (ionItemReorder)="onReorder($event)">
+            @for (item of reorderList(); track item) {
+              <ion-item>
+                <ion-label>{{ item }}</ion-label>
+                <ion-reorder slot="end"></ion-reorder>
+              </ion-item>
+            }
+          </ion-reorder-group>
+          <p class="hint">按住最右侧手柄上下拖动排序。</p>
+        }
+
+        @case ('ion-reorder-group') {
+          <ion-reorder-group [disabled]="false" (ionItemReorder)="onReorder($event)">
+            @for (item of reorderList(); track item) {
+              <ion-item>
+                <ion-icon slot="start" name="list-outline"></ion-icon>
+                <ion-label>{{ item }}</ion-label>
+                <ion-reorder slot="end"></ion-reorder>
+              </ion-item>
+            }
+          </ion-reorder-group>
+          <p class="live">当前顺序：{{ reorderList().join(' → ') }}</p>
+        }
+
+        @default {
+          <p class="hint">该组件暂未提供交互演示。</p>
+        }
+      }
+    </div>
+  }
+
+  <!-- 属性调节区 -->
+  @switch (name()) {
+    @case ('ion-button') {
+      <section class="controls">
+        <h4>属性调节</h4>
+        <div class="control-row">
+          <span>fill</span>
+          <div class="control-chips">
+            @for (f of ['solid', 'outline', 'clear']; track f) {
+              <ion-chip [outline]="btnFill() !== f" (click)="setBtnFill($any(f))">
+                <ion-label>{{ f }}</ion-label>
+              </ion-chip>
+            }
+          </div>
+        </div>
+        <div class="control-row">
+          <span>size</span>
+          <div class="control-chips">
+            @for (s of ['small', 'default', 'large']; track s) {
+              <ion-chip [outline]="btnSize() !== s" (click)="btnSize.set($any(s))">
+                <ion-label>{{ s }}</ion-label>
+              </ion-chip>
+            }
+          </div>
+        </div>
+        <div class="control-row">
+          <span>color</span>
+          <div class="control-chips">
+            @for (c of ['primary', 'success', 'warning', 'danger']; track c) {
+              <ion-chip [outline]="btnColor() !== c" (click)="btnColor.set(c)">
+                <ion-label>{{ c }}</ion-label>
+              </ion-chip>
+            }
+          </div>
+        </div>
+      </section>
+    }
+    @case ('ion-input') {
+      <section class="controls">
+        <h4>属性调节</h4>
+        <div class="control-row">
+          <span>fill</span>
+          <div class="control-chips">
+            @for (f of ['solid', 'outline']; track f) {
+              <ion-chip [outline]="inputFill() !== f" (click)="inputFill.set($any(f))">
+                <ion-label>{{ f }}</ion-label>
+              </ion-chip>
+            }
+          </div>
+        </div>
+        <div class="control-row">
+          <span>labelPlacement</span>
+          <div class="control-chips">
+            @for (p of ['floating', 'stacked', 'start']; track p) {
+              <ion-chip [outline]="labelPlacement() !== p" (click)="labelPlacement.set($any(p))">
+                <ion-label>{{ p }}</ion-label>
+              </ion-chip>
+            }
+          </div>
+        </div>
+      </section>
+    }
+    @default {}
+  }
+
+  <section class="snippet">
+    <header>
+      <span><ion-icon name="code-slash-outline"></ion-icon> 代码片段</span>
+      <button type="button" (click)="copySnippet()">
+        <ion-icon name="copy-outline"></ion-icon>
+        复制
+      </button>
+    </header>
+    <pre><code>{{ snippet() }}</code></pre>
+  </section>
+
+  <div class="bottom-space"></div>
+</ion-content>
+
+<ion-toast
+  [isOpen]="toastOpen()"
+  [message]="toastMsg()"
+  [duration]="1600"
+  position="bottom"
+  (didDismiss)="toastOpen.set(false)"
+></ion-toast>

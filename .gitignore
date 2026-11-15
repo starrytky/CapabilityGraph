@@ -1,0 +1,15 @@
+# 依赖
+node_modules/
+
+# 构建产物
+dist/
+out-tsc/
+tmp/
+
+# 本地工具链与缓存（playwright 脚本、node_modules、截图）
+.tools/
+
+# 系统与编辑器
+Thumbs.db
+.DS_Store
+*.log

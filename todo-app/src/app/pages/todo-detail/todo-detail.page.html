@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/todos" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>待办详情</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="danger" [disabled]="!todo()" (click)="isDeleteOpen.set(true)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (todo(); as item) {
+    <form [formGroup]="form" (ngSubmit)="save()" class="detail-form">
+      <section class="status-card" [class.status-card--done]="form.controls.completed.value">
+        <ion-icon
+          class="status-card__icon"
+          [name]="form.controls.completed.value ? 'checkmark-circle-outline' : 'ellipse-outline'"
+        ></ion-icon>
+        <div class="status-card__text">
+          <p>当前状态</p>
+          <h2>{{ form.controls.completed.value ? '已完成' : '进行中' }}</h2>
+        </div>
+        <ion-toggle formControlName="completed" mode="ios"></ion-toggle>
+      </section>
+
+      <ion-input
+        label="标题"
+        labelPlacement="stacked"
+        fill="outline"
+        mode="md"
+        formControlName="title"
+        [clearInput]="true"
+      ></ion-input>
+      @if (form.controls.title.touched && form.controls.title.invalid) {
+        <ion-note color="danger">标题不能为空，且不超过 60 个字符</ion-note>
+      }
+
+      <ion-textarea
+        label="描述"
+        labelPlacement="stacked"
+        fill="outline"
+        mode="md"
+        formControlName="description"
+        [autoGrow]="true"
+        [rows]="4"
+        placeholder="补充说明（可选）"
+      ></ion-textarea>
+
+      <div class="meta">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>创建于 {{ item.createdAt | date: 'yyyy-MM-dd HH:mm' }}</span>
+        <span class="meta__divider">·</span>
+        <span>更新于 {{ item.updatedAt | date: 'yyyy-MM-dd HH:mm' }}</span>
+      </div>
+
+      <ion-button expand="block" type="submit" class="detail-form__save">
+        <ion-icon slot="start" name="save-outline"></ion-icon>
+        保存修改
+      </ion-button>
+    </form>
+  } @else {
+    <div class="missing">
+      <h2>找不到这条待办</h2>
+      <p>它可能已经被删除了。</p>
+      <ion-button routerLink="/tabs/todos" expand="block">返回列表</ion-button>
+    </div>
+  }
+</ion-content>
+
+<ion-alert
+  [isOpen]="isDeleteOpen()"
+  header="删除待办"
+  message="删除后无法恢复，确定要删除吗？"
+  [buttons]="alertButtons"
+  (didDismiss)="isDeleteOpen.set(false)"
+></ion-alert>
+
+<ion-toast
+  [isOpen]="toastOpen()"
+  [message]="toastMessage()"
+  [duration]="1600"
+  position="bottom"
+  (didDismiss)="toastOpen.set(false)"
+></ion-toast>
