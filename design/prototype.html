@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Capability Graph · 交互设计稿 v0.1</title>
+<style>
+:root{
+  --bg:#F4F3EF; --card:#FFFFFF; --line:#E6E4DE; --line2:#EFEDE7;
+  --ink:#1F1E1C; --sub:#6B6A66; --hint:#9C9A94;
+  --p1:#AFA9EC; --p2:#7F77DD; --p3:#534AB7; --p4:#3C3489; --p0:#DCD9E6;
+  --ok:#1D9E75; --warn:#BA7517;
+  --r-s:8px; --r-m:12px; --r-l:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  padding-bottom:64px;
+}
+.page-head{max-width:1180px;margin:0 auto;padding:44px 24px 8px}
+.page-head h1{font-size:19px;font-weight:500;letter-spacing:.2px}
+.page-head p{font-size:13px;color:var(--sub);margin-top:8px;line-height:1.7;max-width:640px}
+.page-head .tags{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.tag{font-size:12px;color:var(--sub);border:1px solid var(--line);background:#fff;border-radius:20px;padding:4px 10px}
+.frames{max-width:1360px;margin:0 auto;padding:36px 24px 8px;display:flex;flex-wrap:wrap;gap:48px 40px;justify-content:center}
+figure.frame{display:flex;flex-direction:column;gap:14px;width:390px}
+figure.frame figcaption{font-size:12px;color:var(--sub);line-height:1.7}
+figure.frame figcaption b{display:block;font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.phone{
+  width:390px;height:844px;background:#fff;border:1px solid var(--line);
+  border-radius:36px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 2px 14px rgba(31,30,28,.05);flex:none;
+}
+.statusbar{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:13px;font-weight:500}
+.statusbar .bat{width:22px;height:11px;border:1px solid var(--ink);border-radius:3px;position:relative;opacity:.8}
+.statusbar .bat::after{content:"";position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:13px;background:var(--ink);border-radius:1px}
+.body{flex:1;overflow:hidden;padding:0 20px;display:flex;flex-direction:column}
+.tabbar{height:64px;flex:none;border-top:1px solid var(--line);display:flex;background:#fff}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--hint)}
+.tab.on{color:var(--p3)}
+.tab svg{width:20px;height:20px}
+.navrow{display:flex;align-items:center;justify-content:space-between;padding:6px 0 14px}
+.navrow .t{font-size:13px;color:var(--sub)}
+.navrow .date{font-size:12px;color:var(--hint);margin-top:3px}
+.ghost{font-size:13px;color:var(--sub);border:1px solid var(--line);border-radius:16px;padding:5px 11px;background:#fff}
+.score{display:flex;align-items:flex-end;gap:12px;padding-top:4px}
+.score .n{font-size:84px;line-height:.86;font-weight:500;letter-spacing:-3px;font-variant-numeric:tabular-nums;color:var(--p3)}
+.score .unit{font-size:13px;color:var(--hint);padding-bottom:10px}
+.band{font-size:15px;font-weight:500;margin-top:12px}
+.bandsub{font-size:13px;color:var(--sub);margin-top:5px;line-height:1.6}
+.floatbox{
+  margin-top:14px;border-left:2px solid var(--p3);background:#F7F6FB;
+  border-radius:0 var(--r-s) var(--r-s) 0;padding:9px 12px;display:flex;justify-content:space-between;align-items:center;
+}
+.floatbox .txt{font-size:12.5px;color:var(--p4)}
+.floatbox .txt b{font-weight:500}
+.floatbox .when{font-size:11px;color:var(--hint)}
+.breakdown{margin-top:16px;display:flex;flex-direction:column;gap:11px}
+.bd{display:grid;grid-template-columns:52px 1fr 62px;align-items:center;gap:10px}
+.bd .lab{font-size:12.5px;color:var(--sub)}
+.bd .val{font-size:12px;color:var(--hint);text-align:right;font-variant-numeric:tabular-nums}
+.meter{height:6px;background:var(--line2);border-radius:3px;overflow:hidden}
+.meter i{display:block;height:100%;border-radius:3px;background:var(--p3)}
+.meta{margin-top:14px;font-size:12px;color:var(--hint);display:flex;gap:14px}
+.sec{display:flex;align-items:baseline;justify-content:space-between;margin:24px 0 12px}
+.sec h2{font-size:15px;font-weight:500}
+.sec a{font-size:12px;color:var(--hint);text-decoration:none}
+.task{border:1px solid var(--line);border-radius:var(--r-m);padding:13px 14px;display:flex;gap:12px;align-items:center;margin-bottom:10px;background:#fff}
+.task.done{background:#FAFAF8}
+.task.done .task-name{color:var(--hint);text-decoration:line-through}
+.task.done .task-meta{opacity:.4}
+.slot{font-size:11px;padding:3px 7px;border-radius:5px;flex:none;letter-spacing:.3px}
+.slot.s1{background:#EEEDFE;color:var(--p4)}
+.slot.s2{background:#E6F1FB;color:#185FA5}
+.slot.s3{background:#E1F5EE;color:#0F6E56}
+.task-main{flex:1;min-width:0}
+.task-name{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.task-why{font-size:12px;color:var(--sub);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.task-meta{text-align:right;flex:none}
+.task-meta b{display:block;font-size:13px;font-weight:500;color:var(--p3);font-variant-numeric:tabular-nums}
+.task-meta span{font-size:11px;color:var(--hint)}
+.empty{flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding-bottom:60px}
+.empty h3{font-size:20px;font-weight:500}
+.empty p{font-size:13px;color:var(--sub);margin-top:10px;line-height:1.8;max-width:290px}
+.btn{display:block;width:100%;text-align:center;background:var(--p3);color:#fff;font-size:15px;font-weight:500;border-radius:var(--r-m);padding:14px;margin-top:24px}
+.btn.line{background:#fff;color:var(--sub);border:1px solid var(--line);margin-top:10px;font-weight:400}
+.tipbox{margin-top:22px;border:1px solid var(--line);border-radius:var(--r-m);padding:12px 14px;font-size:12.5px;color:var(--sub);line-height:1.7;background:#FAFAF8}
+.chips{display:flex;gap:8px;padding:2px 0 16px;overflow:hidden}
+.chip{font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:14px;padding:5px 11px;white-space:nowrap;background:#fff}
+.chip.on{background:var(--p4);border-color:var(--p4);color:#fff}
+.zone{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line2)}
+.zone:last-of-type{border-bottom:none}
+.zone .zname{width:96px;flex:none;font-size:13.5px}
+.zone .zbar{flex:1;height:7px;background:var(--line2);border-radius:4px;overflow:hidden}
+.zone .zbar i{display:block;height:100%;border-radius:4px;background:var(--p3)}
+.zone .zbar i.none{background:repeating-linear-gradient(90deg,var(--p0) 0 3px,transparent 3px 6px)}
+.zone .znum{width:56px;text-align:right;font-size:12px;color:var(--hint);font-variant-numeric:tabular-nums;flex:none}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.st{font-size:11px;padding:3px 8px;border-radius:5px;border:1px solid var(--line);color:var(--sub);background:#fff}
+.st.a{border-color:var(--p0);color:var(--hint)}
+.st.b{border-color:#B5D4F4;color:#185FA5;background:#E6F1FB}
+.st.c{border-color:#9FE1CB;color:#0F6E56;background:#E1F5EE}
+.st.d{border-color:#FAC775;color:#854F0B;background:#FAEEDA}
+.detail-top{display:flex;align-items:center;gap:12px;padding:6px 0 16px}
+.back{width:26px;height:26px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:14px}
+.detail-top .nm{flex:1;font-size:17px;font-weight:500}
+.wt{font-size:11px;color:var(--sub);border:1px solid var(--line);border-radius:5px;padding:3px 7px}
+.msum{display:flex;align-items:flex-end;gap:10px;padding-bottom:16px;border-bottom:1px solid var(--line2)}
+.msum .n{font-size:44px;line-height:1;font-weight:500;letter-spacing:-1px;font-variant-numeric:tabular-nums;color:var(--p3)}
+.msum .l{font-size:12px;color:var(--hint);padding-bottom:4px}
+.layers{display:flex;flex-direction:column;gap:12px;padding:16px 0;border-bottom:1px solid var(--line2)}
+.layer{display:grid;grid-template-columns:96px 1fr 40px;align-items:center;gap:10px}
+.layer .ln{font-size:12.5px;color:var(--sub)}
+.layer .lv{font-size:12px;color:var(--hint);text-align:right;font-variant-numeric:tabular-nums}
+.gate{grid-column:2/4;font-size:11.5px;color:var(--warn);margin-top:-4px}
+.whyblock{padding:16px 0;border-bottom:1px solid var(--line2)}
+.whyblock h4{font-size:13px;font-weight:500;margin-bottom:8px}
+.whyblock p{font-size:13px;color:var(--sub);line-height:1.8}
+.tl{padding:14px 0 6px}
+.tl h4{font-size:13px;font-weight:500;margin-bottom:12px}
+.tli{display:flex;gap:10px;font-size:12.5px;color:var(--sub);padding:7px 0;align-items:baseline}
+.tli .d{width:34px;flex:none;color:var(--hint);font-size:11.5px}
+.tli .g{flex:1}
+.tli .s{color:var(--p3);font-variant-numeric:tabular-nums;font-size:12px}
+.misc{padding:10px 0 0}
+.miscrow{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:var(--sub);padding:9px 0;border-bottom:1px solid var(--line2)}
+.miscrow span.q{color:var(--warn);font-size:11.5px;flex:none}
+.actionbar{flex:none;border-top:1px solid var(--line);padding:12px 20px 18px;display:flex;gap:10px;background:#fff}
+.actionbar .ab{flex:1;text-align:center;font-size:13px;padding:11px;border-radius:10px;border:1px solid var(--line);color:var(--sub)}
+.actionbar .ab.primary{background:var(--p3);border-color:var(--p3);color:#fff;font-weight:500}
+.actionbar .ab.off{color:#C6C4BE;border-color:var(--line2)}
+.rv-top{display:flex;justify-content:space-between;align-items:center;padding:8px 0 18px;font-size:12.5px;color:var(--hint)}
+.rv-card{border:1px solid var(--line);border-radius:var(--r-l);padding:18px}
+.rv-name{font-size:17px;font-weight:500}
+.rv-sub{font-size:12.5px;color:var(--sub);margin-top:8px;line-height:1.7}
+.rv-sub b{color:var(--warn);font-weight:500}
+.code{margin-top:16px;background:#FAFAF8;border:1px solid var(--line2);border-radius:10px;padding:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.85;color:#3C3A36;white-space:pre}
+.qh{font-size:13px;font-weight:500;margin-top:18px}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:12px 13px;margin-top:9px}
+.opt .ol{font-size:13px}
+.opt .oh{font-size:11px;color:var(--hint)}
+.rv-note{margin-top:16px;font-size:12px;color:var(--hint);line-height:1.7}
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,11px);gap:3px;margin-top:6px}
+.heat i{width:11px;height:11px;border-radius:2px;background:var(--line2);display:block}
+.heat i.rest{background:repeating-linear-gradient(135deg,#E6E4DE 0 2px,#F7F6F2 2px 4px)}
+.statrow{display:flex;gap:26px;margin-top:18px}
+.stat .k{font-size:11.5px;color:var(--hint)}
+.stat .v{font-size:20px;font-weight:500;margin-top:4px;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:11.5px;color:var(--hint);font-weight:400;margin-left:4px}
+.wk{padding:6px 0}
+.wk h4{font-size:13.5px;font-weight:500;margin-top:16px}
+.wk p{font-size:12.5px;color:var(--sub);line-height:1.85;margin-top:6px}
+.wk .num{font-size:12.5px;color:var(--p4);font-weight:500}
+.divider{height:1px;background:var(--line2);margin:18px 0}
+.footnote{margin-top:auto;padding:18px 0 16px;font-size:11.5px;color:var(--hint);line-height:1.75;border-top:1px solid var(--line2)}
+.mini{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--sub);padding:10px 0;border-bottom:1px solid var(--line2)}
+.mini:last-child{border-bottom:none}
+.mini b{font-weight:400;color:var(--warn);font-size:11.5px}
+.rel{display:flex;flex-wrap:wrap;gap:8px;padding:16px 0 4px}
+.relchip{font-size:11.5px;color:var(--p4);background:#EEEDFE;border-radius:6px;padding:5px 9px}
+.monthrow{display:flex;font-size:10.5px;color:var(--hint);padding-bottom:6px;letter-spacing:.3px}
+.goal{margin-top:20px;border:1px solid var(--line);border-radius:var(--r-m);padding:14px}
+.goal .gh{display:flex;justify-content:space-between;font-size:12.5px;color:var(--sub)}
+.goal .gh b{font-weight:500;color:var(--ink)}
+.goal .gbar{height:6px;background:var(--line2);border-radius:3px;overflow:hidden;margin-top:11px}
+.goal .gbar i{display:block;height:100%;background:var(--p3);border-radius:3px}
+.misc h4{font-size:13px;font-weight:500;margin-bottom:6px}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:22px}
+.dots i{width:6px;height:6px;border-radius:3px;background:var(--line);display:block}
+.dots i.on{background:var(--p3);width:18px}
+.tagline{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.tagline span{font-size:11.5px;color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:4px 9px}
+.spec{max-width:1180px;margin:72px auto 0;padding:0 24px}
+.spec h2{font-size:17px;font-weight:500;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.specgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:34px;margin-top:28px}
+.specblock h3{font-size:13.5px;font-weight:500;margin-bottom:14px}
+.swatches{display:flex;flex-direction:column;gap:9px}
+.sw{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--sub)}
+.sw i{width:26px;height:26px;border-radius:6px;flex:none;border:1px solid rgba(0,0,0,.05)}
+.sw b{color:var(--ink);font-weight:400;width:112px}
+.sw span{color:var(--hint);font-size:11.5px}
+.typerow{display:flex;align-items:baseline;gap:14px;padding:7px 0;border-bottom:1px solid var(--line2);font-size:12px;color:var(--sub)}
+.typerow b{color:var(--ink);font-weight:400;width:88px;flex:none}
+.rule{font-size:12.5px;color:var(--sub);line-height:1.95}
+.rule code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:#fff;border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.rule b{color:var(--ink);font-weight:500}
+.rule li{margin-left:16px;margin-top:5px}
+.no{color:#A32D2D}
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <h1>Capability Graph · 交互设计稿 v0.1</h1>
+  <p>7 屏，390×844，浅色主题。数值沿用设计文档里的示例计算：事件循环节点掌握度 26，当日分 84。颜色只承载「难度层」与「分数档位」两种语义，其余全部用中性灰。</p>
+  <div class="tags">
+    <span class="tag">三个 Tab：今日 / 地图 / 我的</span>
+    <span class="tag">分数色阶 5 档（无红色）</span>
+    <span class="tag">难度层 D1–D4</span>
+    <span class="tag">触控目标 ≥44×44</span>
+  </div>
+</header>
+
+<main class="frames">
+
+  <!-- 01 今日 -->
+  <figure class="frame">
+    <div class="phone">
+      <div class="statusbar"><span>21:58</span><span class="bat"></span></div>
+      <div class="body">
+        <div class="navrow">
+          <div><div class="t">今日</div><div class="date">11月16日 周一</div></div>
+          <div class="ghost">今天休息</div>
+        </div>
+        <div class="score"><span class="n">84</span><span class="unit">/ 100</span></div>
+        <div class="band">强证据日</div>
+        <div class="bandsub">一次 D3 修复 + 2 次复现</div>
+        <div class="floatbox">
+          <div class="txt"><b>+8</b> 来自「修了 setTimeout 顺序 bug」</div>
+          <div class="when">刚刚</div>
+        </div>
+        <div class="breakdown">
+          <div class="bd"><span class="lab">增量</span><span class="meter"><i style="width:87%"></i></span><span class="val">52 / 60</span></div>
+          <div class="bd"><span class="lab">巩固</span><span class="meter"><i style="width:100%"></i></span><span class="val">25 / 25</span></div>
+          <div class="bd"><span class="lab">结构</span><span class="meter"><i style="width:47%"></i></span><span class="val">7 / 15</span></div>
+        </div>
+        <div class="meta"><span>近 7 日均分 68</span><span>昨日 71</span></div>
+        <div class="sec"><h2>今日三件事</h2><a>换一批 · 剩 3 次</a></div>
+        <div class="task"><span class="slot s1">还债</span><div class="task-main"><div class="task-name">事件循环与任务队列</div><div class="task-why">21 天未复现，掌握度 68 → 41</div></div><div class="task-meta"><b>+6~9</b><span>12min</span></div></div>
+        <div class="task done"><span class="slot s2">缺口</span><div class="task-main"><div class="task-name">TS 泛型与条件类型</div><div class="task-why">已完成 · 前置「类型收窄」72/60</div></div><div class="task-meta"><b>+4~7</b><span>已完成</span></div></div>
+        <div class="task"><span class="slot s3">拓宽</span><div class="task-main"><div class="task-name">合成层与 will-change 陷阱</div><div class="task-why">与你在学的「重排重绘」相邻</div></div><div class="task-meta"><b>+2~5</b><span>10min</span></div></div>
+        <div class="footnote">三件事做完就收工，不补位、不推更多。<br>还想练的话，从「还债」里自己挑。</div>
+      </div>
+      <div class="tabbar">
+        <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg><span>今日</span></div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>地图</span></div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="9" r="3.4"/><path d="M5.5 19c.9-3.3 3.4-5 6.5-5s5.6 1.7 6.5 5"/></svg><span>我的</span></div>
+      </div>
+    </div>
+    <figcaption><b>01 今日（有证据）</b>分数与三项分解同屏，分数的每一分都能点开追溯。浮层是一次性的正反馈：404ms 跳变后出现，2.4s 淡出。三件事完成后置灰且不补位。</figcaption>
+  </figure>
+
+  <!-- 02 今日空态 -->
+  <figure class="frame">
+    <div class="phone">
+      <div class="statusbar"><span>08:12</span><span class="bat"></span></div>
+      <div class="body">
+        <div class="navrow">
+          <div><div class="t">今日</div><div class="date">11月16日 周一</div></div>
+          <div class="ghost">今天休息</div>
+        </div>
+        <div class="empty">
+          <h3>今天还没有证据</h3>
+          <p>读了三篇文章，也只是读过。<br>等第一条证据进来，这里才会出现数字。</p>
+        </div>
+        <div class="btn">记一笔</div>
+        <div class="btn line">补记昨天</div>
+        <div class="tipbox">今天没状态？右上角可以标休息 —— 不计分，也不打断任何记录。一周最多 3 天。</div>
+      </div>
+      <div class="tabbar">
+        <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg><span>今日</span></div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>地图</span></div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="9" r="3.4"/><path d="M5.5 19c.9-3.3 3.4-5 6.5-5s5.6 1.7 6.5 5"/></svg><span>我的</span></div>
+      </div>
+    </div>
+    <figcaption><b>02 今日（空态）</b>空态绝不显示 0 分——0 会被读成惩罚。主行动只有一个按钮，两个次要入口都在下方，避免首屏出现三个平行选择。</figcaption>
+  </figure>
+
+  <!-- 03 地图 -->
+  <figure class="frame">
+    <div class="phone">
+      <div class="statusbar"><span>21:58</span><span class="bat"></span></div>
+      <div class="body">
+        <div class="navrow"><div><div class="t">地图</div><div class="date">40 个节点 · 已点亮 11</div></div><div class="ghost">从高价值看</div></div>
+        <div class="chips">
+          <span class="chip on">全部</span><span class="chip">待复习</span><span class="chip">未验证</span><span class="chip">高价值未学</span>
+        </div>
+        <div class="zone"><span class="zname">语言与范式</span><span class="zbar"><i style="width:72%"></i></span><span class="znum">12 / 20</span></div>
+        <div class="zone"><span class="zname">浏览器与网络</span><span class="zbar"><i style="width:48%"></i></span><span class="znum">8 / 20</span></div>
+        <div class="zone"><span class="zname">框架与应用</span><span class="zbar"><i style="width:21%"></i></span><span class="znum">3 / 30</span></div>
+        <div class="zone"><span class="zname">工程化与质量</span><span class="zbar"><i class="none" style="width:100%"></i></span><span class="znum">0 / 25</span></div>
+        <div class="zone"><span class="zname">性能与可观测</span><span class="zbar"><i style="width:6%"></i></span><span class="znum">1 / 20</span></div>
+        <div class="zone"><span class="zname">界面与可访问</span><span class="zbar"><i style="width:34%"></i></span><span class="znum">5 / 30</span></div>
+        <div class="legend">
+          <span class="st a">未验证</span><span class="st b">在学</span><span class="st c">已巩固</span><span class="st d">待复习</span>
+        </div>
+        <div class="tipbox">亮度条按「掌握度 × 岗位价值」加权，学了一堆低价值节点不会显得很强。点开一个区可以下钻到节点。</div>
+        <div class="sec" style="margin:22px 0 6px"><h2>最近该还的 5 个</h2></div>
+        <div class="mini"><span>重排与重绘的触发条件</span><b>逾期 3 天</b></div>
+        <div class="mini"><span>属性描述符与 getter/setter</span><b>逾期 11 天</b></div>
+        <div class="mini"><span>HTTP 缓存策略</span><b>逾期 2 天</b></div>
+        <div class="footnote">逾期超过 3 个半衰期的节点会转入「待重建」，不再标红。</div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg><span>今日</span></div>
+        <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>地图</span></div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="9" r="3.4"/><path d="M5.5 19c.9-3.3 3.4-5 6.5-5s5.6 1.7 6.5 5"/></svg><span>我的</span></div>
+      </div>
+    </div>
+    <figcaption><b>03 地图</b>不用雷达图：面积随维度数失真、无法下钻。亮度条 + 树结构一路能点到可执行的动作。「未验证」区用斜纹而非 0 长度条，区分「没数据」和「很差」。</figcaption>
+  </figure>
+
+  <!-- 04 节点详情 -->
+  <figure class="frame">
+    <div class="phone">
+      <div class="statusbar"><span>21:58</span><span class="bat"></span></div>
+      <div class="body">
+        <div class="detail-top"><span class="back">‹</span><span class="nm">事件循环与任务队列</span><span class="wt">价值 4/5</span></div>
+        <div class="msum"><span class="n">26</span><span class="l">/ 100 · 置信度 0.73</span></div>
+        <div class="layers">
+          <div class="layer"><span class="ln">D1 概念记忆</span><span class="meter"><i style="width:60%;background:var(--p1)"></i></span><span class="lv">60</span></div>
+          <div class="layer"><span class="ln">D2 手写实现</span><span class="meter"><i style="width:40%;background:var(--p2)"></i></span><span class="lv">40</span></div>
+          <div class="layer"><span class="ln">D3 排错应用</span><span class="meter"><i style="width:40%;background:var(--p3)"></i></span><span class="lv">40</span></div>
+          <div class="gate">前置「微任务时序」48 / 60，这类证据按 50% 计入</div>
+          <div class="layer"><span class="ln">D4 架构决策</span><span class="meter"><i style="width:0%;background:var(--p4)"></i></span><span class="lv">0</span></div>
+        </div>
+        <div class="whyblock">
+          <h4>你什么时候会用到</h4>
+          <p>能说出含 setTimeout 与 Promise 的代码的输出顺序并解释原因。动画掉帧、请求回调来得比预期晚、await 之后顺序不对 —— 都是它。</p>
+        </div>
+        <div class="tl">
+          <h4>证据时间线</h4>
+          <div class="tli"><span class="d">今天</span><span class="g">修了时序 bug</span><span class="s">+0.8 D3</span></div>
+          <div class="tli"><span class="d">今天</span><span class="g">最小示例 + 说明</span><span class="s">+0.6 D2</span></div>
+          <div class="tli"><span class="d">昨天</span><span class="g">自测 3/3</span><span class="s">+0.4 D1</span></div>
+        </div>
+        <div class="misc"><h4>常见误区</h4>
+          <div class="miscrow"><span>「微任务一定比宏任务先」</span><span class="q">待辨析</span></div>
+          <div class="miscrow" style="border-bottom:none"><span>「await 之后的代码在微任务里执行」</span><span class="q">待辨析</span></div>
+          <div class="rel"><span class="relchip">微任务时序</span><span class="relchip">requestAnimationFrame 时序</span><span class="relchip">合成层</span></div>
+        </div>
+      </div>
+      <div class="actionbar">
+        <div class="ab primary">测一测</div>
+        <div class="ab">写示例</div>
+        <div class="ab off">讲一遍</div>
+      </div>
+    </div>
+    <figcaption><b>04 节点详情</b>四条分层进度条必须在首屏——它回答「我卡在哪一层」，这是本产品相对其他学习工具最实际的价值。门禁原因写在 D3 行下方，不弹窗、不阻断。</figcaption>
+  </figure>
+
+  <!-- 05 复习卡 -->
+  <figure class="frame">
+    <div class="phone">
+      <div class="statusbar"><span>07:40</span><span class="bat"></span></div>
+      <div class="body">
+        <div class="rv-top"><span>复习 1 / 3</span><span>退出</span></div>
+        <div class="rv-card">
+          <div class="rv-name">重排与重绘的触发条件</div>
+          <div class="rv-sub">21 天未复现，掌握度 <b>68 → 41</b></div>
+          <div class="code">el.style.width = '120px';
+el.style.height = '80px';
+el.style.transform = 'translateX(10px)';</div>
+          <div class="qh">这段代码触发了几次重排？</div>
+          <div class="opt"><span class="ol">完全想不起</span><span class="oh">1 天后</span></div>
+          <div class="opt"><span class="ol">想起来但写不出</span><span class="oh">3 天后</span></div>
+          <div class="opt"><span class="ol">能写但要查文档</span><span class="oh">7 天后</span></div>
+          <div class="opt"><span class="ol">不用查就能写</span><span class="oh">间隔翻倍</span></div>
+        </div>
+        <div class="rv-note">逾期 3 天，这一笔还上更值分。<br>「完全想不起」不算失败，只是把它重新排进队列。</div>
+        <div class="dots"><i class="on"></i><i></i><i></i></div>
+        <div class="tagline"><span>本题考察 D2 手写实现</span><span>先跳过</span></div>
+        <div class="footnote">复习是取回，不是重读。所以卡片里放的是题，不是文档。</div>
+      </div>
+    </div>
+    <figcaption><b>05 复习卡</b>四档自评直接映射到强度与下次间隔，界面只显示「几天后」，不解释公式。卡片里是复现题，不是重学材料——复习的目标是取回，不是重读。</figcaption>
+  </figure>
+
+  <!-- 06 趋势 -->
+  <figure class="frame">
+    <div class="phone">
+      <div class="statusbar"><span>21:58</span><span class="bat"></span></div>
+      <div class="body">
+        <div class="navrow"><div><div class="t">趋势</div><div class="date">近 120 天</div></div><div class="ghost">上周复盘</div></div>
+        <div class="monthrow"><span style="width:112px">10月</span><span>11月</span></div>
+        <div class="heat" id="heat"></div>
+        <div class="statrow">
+          <div class="stat"><div class="k">7 日均分</div><div class="v">68<small>/100</small></div></div>
+          <div class="stat"><div class="k">有效天数</div><div class="v">5<small>/7</small></div></div>
+          <div class="stat"><div class="k">休息</div><div class="v">2<small>天</small></div></div>
+        </div>
+        <svg viewBox="0 0 320 96" width="100%" height="96" style="margin-top:20px" aria-hidden="true">
+          <line x1="0" y1="88" x2="320" y2="88" stroke="#EFEDE7" stroke-width="1"/>
+          <line x1="0" y1="48" x2="320" y2="48" stroke="#EFEDE7" stroke-width="1"/>
+          <polyline id="line" fill="none" stroke="#534AB7" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+          <polyline id="ma" fill="none" stroke="#AFA9EC" stroke-width="1.2" stroke-dasharray="3 3"/>
+        </svg>
+        <div class="legend" style="margin-top:4px">
+          <span class="st" style="border:none;padding-left:0">— 日分</span>
+          <span class="st" style="border:none;color:var(--hint)">- - 7 日移动均线</span>
+        </div>
+        <div class="goal">
+          <div class="gh"><span>本周目标 · 8 条 D2 以上证据</span><b>5 / 8</b></div>
+          <div class="gbar"><i style="width:62%"></i></div>
+          <div class="gh" style="margin-top:10px;font-size:11.5px"><span>已有 3 条 D3，再补 3 条即可</span><span></span></div>
+        </div>
+        <div class="sec" style="margin:20px 0 10px"><h2>近 30 天构成</h2><a>增量偏高</a></div>
+        <div class="breakdown">
+          <div class="bd"><span class="lab">增量</span><span class="meter"><i style="width:64%"></i></span><span class="val">64%</span></div>
+          <div class="bd"><span class="lab">巩固</span><span class="meter"><i style="width:24%"></i></span><span class="val">24%</span></div>
+          <div class="bd"><span class="lab">结构</span><span class="meter"><i style="width:12%"></i></span><span class="val">12%</span></div>
+        </div>
+        <div class="footnote">增量占比偏高，说明你一直在冲新东西，复习欠着。深斜纹是主动休息，浅灰是没记录，都不进均分分母。</div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg><span>今日</span></div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>地图</span></div>
+        <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="9" r="3.4"/><path d="M5.5 19c.9-3.3 3.4-5 6.5-5s5.6 1.7 6.5 5"/></svg><span>我的</span></div>
+      </div>
+    </div>
+    <figcaption><b>06 趋势</b>热力格的深浅是分数不是次数；休息日与空白日视觉必须可区分。没有「连续 30 天」大徽章——连续记录只做次要信息，断签焦虑会逼出敷衍填卡。</figcaption>
+  </figure>
+
+  <!-- 07 周报 -->
+  <figure class="frame">
+    <div class="phone">
+      <div class="statusbar"><span>09:30</span><span class="bat"></span></div>
+      <div class="body">
+        <div class="navrow"><div><div class="t">上周复盘</div><div class="date">11月9日 – 11月15日</div></div><div class="ghost">分享为图</div></div>
+        <div class="wk">
+          <p><span class="num">72</span> 分 · 比前一周 +6。5 天有分，2 天休息。</p>
+          <h4>高分日的共性</h4>
+          <p>你的 3 个 80 分以上的日子，都出现了 D3 证据（排错或真实代码里用过）。只做自测的日子集中在 45–55。</p>
+          <div class="divider"></div>
+          <h4>卡住的地方</h4>
+          <p>「合成层与 will-change」连续 3 天出现在三件事里但没动过。<br>「TS 泛型」逾期 2 次，建议先补前置「类型收窄」。</p>
+          <div class="divider"></div>
+          <h4>本周一个动作</h4>
+          <p>留 30 分钟，把你上周修的那个时序 bug 补一条 D3 证据 —— 你已经有素材了，只是没记。</p>
+        </div>
+        <div class="tipbox">无数据的一周不会推送，也不会生成「你上周什么都没做」这类文案。</div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg><span>今日</span></div>
+        <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg><span>地图</span></div>
+        <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="9" r="3.4"/><path d="M5.5 19c.9-3.3 3.4-5 6.5-5s5.6 1.7 6.5 5"/></svg><span>我的</span></div>
+      </div>
+    </div>
+    <figcaption><b>07 周报</b>固定四段，第 1 版不接大模型，全模板化：宁可话糙，也不要说「继续加油」这类废话。最后一段必须给一个具体动作。</figcaption>
+  </figure>
+
+</main>
+
+<section class="spec">
+  <h2>设计规范</h2>
+  <div class="specgrid">
+
+    <div class="specblock">
+      <h3>色彩</h3>
+      <div class="swatches">
+        <div class="sw"><i style="background:#F4F3EF"></i><b>页面底色</b><span>#F4F3EF</span></div>
+        <div class="sw"><i style="background:#FFFFFF"></i><b>卡片</b><span>#FFFFFF</span></div>
+        <div class="sw"><i style="background:#1F1E1C"></i><b>主文字</b><span>#1F1E1C</span></div>
+        <div class="sw"><i style="background:#6B6A66"></i><b>次要文字</b><span>#6B6A66</span></div>
+        <div class="sw"><i style="background:#DCD9E6"></i><b>分数 0–29</b><span>#DCD9E6 仅作底色</span></div>
+        <div class="sw"><i style="background:#AFA9EC"></i><b>分数 30–49 / D1</b><span>#AFA9EC</span></div>
+        <div class="sw"><i style="background:#7F77DD"></i><b>分数 50–69 / D2</b><span>#7F77DD</span></div>
+        <div class="sw"><i style="background:#534AB7"></i><b>分数 70–84 / D3</b><span>#534AB7</span></div>
+        <div class="sw"><i style="background:#3C3489"></i><b>分数 85–100 / D4</b><span>#3C3489</span></div>
+        <div class="sw"><i style="background:#BA7517"></i><b>提醒（门禁/逾期）</b><span>#BA7517</span></div>
+      </div>
+      <p class="rule" style="margin-top:12px">低分不用红色。红色会把「还不会」编码成「做错了」，而这个产品里还不会才是常态。分数只用同一色相的深浅表达，且必须同时给出文字档位（<code>强证据日</code>），不靠颜色单独承载信息。</p>
+    </div>
+
+    <div class="specblock">
+      <h3>字体与节奏</h3>
+      <div class="typerow"><b>分数</b><span>84px / 500 / 字距 -3px / tabular-nums</span></div>
+      <div class="typerow"><b>节点掌握度</b><span>44px / 500 / tabular-nums</span></div>
+      <div class="typerow"><b>页面标题</b><span>17px / 500</span></div>
+      <div class="typerow"><b>区块标题</b><span>15px / 500</span></div>
+      <div class="typerow"><b>正文</b><span>13px / 400 / 行高 1.8</span></div>
+      <div class="typerow"><b>辅助</b><span>12px / 400 / 次要色</span></div>
+      <p class="rule" style="margin-top:12px">间距一律 4 的倍数：卡片内边距 13–14，区块间距 24，列表项 10。圆角：卡片 12 / 大卡 20 / 手机框 36。数字全部用等宽数字，避免分数跳动时宽度抖动。</p>
+    </div>
+
+    <div class="specblock">
+      <h3>动效</h3>
+      <p class="rule">
+        <li><b>分数跳变</b> 420ms <code>cubic-bezier(.2,.8,.2,1)</code>，数字滚动而非替换</li>
+        <li><b>来源浮层</b> 入 180ms 上移 4px，停留 2.4s，出 240ms 淡出</li>
+        <li><b>卡片置灰</b> 160ms，完成后 1 次轻微缩放 0.98 → 1</li>
+        <li><b>地图展开</b> 高度 200ms，不使用弹簧效果</li>
+        <li>全部动效在 <code>prefers-reduced-motion</code> 下退化为直接切换</li>
+      </p>
+      <p class="rule" style="margin-top:10px">整个产品只有一处动效值得花力气：分数变化。它必须在 400ms 左右完成、并伴随来源浮层。省掉它，产品就退化成一块冷冰冰的仪表盘。</p>
+    </div>
+
+    <div class="specblock">
+      <h3>文案</h3>
+      <p class="rule">
+        <li>五档：<code>还没变成能力</code> / <code>都在概念层</code> / <code>有实打实的进展</code> / <code>强证据日</code> / <code>结构级进展</code></li>
+        <li>禁止「你太差了」「又断了」「击败了 xx% 的用户」</li>
+        <li>把「你答错了」改为「这里我没听懂，能换个说法吗」</li>
+        <li>把「失败」改为「这组还不够」</li>
+        <li>所有分数变化都要能追到一句具体的话，例如「+8 来自 修了 setTimeout 顺序 bug」</li>
+      </p>
+    </div>
+
+    <div class="specblock">
+      <h3>无障碍</h3>
+      <p class="rule">
+        <li>正文对比度 ≥ 4.5:1，大号数字 ≥ 3:1</li>
+        <li>可点击区域 ≥ 44×44，卡片整块可点</li>
+        <li>分数不单独依赖颜色 — 必须同时有文字档位</li>
+        <li>进度条全部带 <code>role="meter"</code> 与可读值</li>
+        <li>动效遵循 <code>prefers-reduced-motion</code></li>
+      </p>
+      <p class="rule" style="margin-top:10px">这条不只是合规：产品里「可访问性」是六大能力区之一，自己的界面不过关说不过去。</p>
+    </div>
+
+    <div class="specblock">
+      <h3>这版故意没做的</h3>
+      <p class="rule">
+        <li class="no">排行榜、好友、公开主页</li>
+        <li class="no">连续打卡徽章、断签提醒</li>
+        <li class="no">内容推荐流、视频课入口</li>
+        <li class="no">任何付费墙或功能锁</li>
+        <li class="no">深色模式（等交互稳定后再做，避免两套维护）</li>
+      </p>
+      <p class="rule" style="margin-top:10px">前四项不是排期靠后，是设计上拒绝。它们会把产品推向它打不过的战场，或污染分数的可信度。</p>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function(){
+  var bands=[[30,'#DCD9E6'],[50,'#AFA9EC'],[70,'#7F77DD'],[85,'#534AB7'],[101,'#3C3489']];
+  function color(s){for(var i=0;i<bands.length;i++){if(s<bands[i][0])return bands[i][1];}return '#3C3489';}
+  var seed=11;
+  function rnd(){seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;}
+  var heat=document.getElementById('heat');
+  var data=[];
+  for(var i=0;i<119;i++){
+    var r=rnd();
+    if(r<0.10){data.push(null);var c=document.createElement('i');c.className='rest';heat.appendChild(c);}
+    else{
+      var base=40+rnd()*45;
+      if(rnd()<0.18)base=12+rnd()*20;
+      if(rnd()<0.15)base=78+rnd()*20;
+      var v=Math.max(4,Math.min(99,Math.round(base)));
+      data.push(v);
+      var c2=document.createElement('i');
+      c2.style.background=color(v);
+      heat.appendChild(c2);
+    }
+  }
+  var last=data.filter(function(d){return d!==null;}).slice(-30);
+  var vals=last.length?last:[40,52,48,66,70,58,72,64,80,75,68,84];
+  var n=vals.length,max=100;
+  var pts=vals.map(function(v,i){
+    var x=i*(320/(n-1));
+    var y=88-(v/max)*76;
+    return x.toFixed(1)+','+y.toFixed(1);
+  }).join(' ');
+  document.getElementById('line').setAttribute('points',pts);
+  var ma=[];
+  for(var j=0;j<vals.length;j++){
+    var s=vals.slice(Math.max(0,j-6),j+1);
+    var avg=s.reduce(function(a,b){return a+b;},0)/s.length;
+    ma.push((j*(320/(n-1))).toFixed(1)+','+(88-(avg/max)*76).toFixed(1));
+  }
+  document.getElementById('ma').setAttribute('points',ma.join(' '));
+})();
+</script>
+</body>
+</html>
